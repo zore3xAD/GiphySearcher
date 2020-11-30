@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.anton.dobrogorsky.giphysearcher.R
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -25,7 +28,9 @@ class SearchGifFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.searchGif()
+        viewModel.searchGifSuccess.observe(this, { data ->
+            // TODO: do something
+        })
     }
 
 }

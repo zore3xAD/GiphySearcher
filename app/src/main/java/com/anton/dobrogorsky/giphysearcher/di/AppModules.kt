@@ -5,6 +5,7 @@ import com.anton.dobrogorsky.giphysearcher.flow.search_gif.SearchGifViewModel
 import com.anton.dobrogorsky.giphysearcher.service.giphy.Giphy
 import com.anton.dobrogorsky.giphysearcher.service.giphy.GiphyConfigurator
 import com.anton.dobrogorsky.giphysearcher.service.giphy.api.SearchApi
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -25,7 +26,9 @@ object AppModules {
 
     fun provideGiphyRetrofit():Retrofit {
         return Retrofit.Builder().baseUrl(BuildConfig.GIPHY_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()).build()
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     fun provideGiphyConfigurator(): GiphyConfigurator {
