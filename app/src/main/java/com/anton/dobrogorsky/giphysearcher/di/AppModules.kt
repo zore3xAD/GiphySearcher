@@ -1,11 +1,19 @@
 package com.anton.dobrogorsky.giphysearcher.di
 
+import android.app.Application
 import com.anton.dobrogorsky.giphysearcher.BuildConfig
+import com.anton.dobrogorsky.giphysearcher.R
 import com.anton.dobrogorsky.giphysearcher.flow.search_gif.SearchGifViewModel
 import com.anton.dobrogorsky.giphysearcher.service.giphy.Giphy
 import com.anton.dobrogorsky.giphysearcher.service.giphy.GiphyConfigurator
 import com.anton.dobrogorsky.giphysearcher.service.giphy.api.SearchApi
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -22,6 +30,29 @@ object AppModules {
         single { provideGiphyConfigurator() }
         single { provideSearchApi(retrofit = get()) }
         single { provideGiphy(configurator = get(), searchApi = get()) }
+    }
+
+    val glide = module {
+        single { provideRequestOptions() }
+        single { provideRequestManager(application = androidApplication(), requestOptions = get()) }
+    }
+
+    fun provideRequestManager(
+        application: Application,
+        requestOptions: RequestOptions
+    ): RequestManager {
+        return Glide.with(application)
+            .setDefaultRequestOptions(requestOptions)
+    }
+
+    fun provideRequestOptions(): RequestOptions {
+        return RequestOptions()
+            .fitCenter()
+            .format(DecodeFormat.PREFER_ARGB_8888)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerInside()
+            .placeholder(R.drawable.ic_load)
+            .error(R.drawable.ic_error)
     }
 
     fun provideGiphyRetrofit():Retrofit {

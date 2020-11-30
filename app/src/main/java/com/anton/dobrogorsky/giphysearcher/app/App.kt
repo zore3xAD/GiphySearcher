@@ -17,7 +17,8 @@ class App : Application() {
             koin.loadModules(
                 listOf(
                     AppModules.giphy,
-                    AppModules.viewModel
+                    AppModules.viewModel,
+                    AppModules.glide
                 )
             )
             koin.createRootScope()
