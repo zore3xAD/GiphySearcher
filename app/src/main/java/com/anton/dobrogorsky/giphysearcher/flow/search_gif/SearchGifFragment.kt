@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,9 +40,16 @@ class SearchGifFragment : Fragment() {
             layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
             adapter = gifAdapter
         }
-        viewModel.searchGifSuccess.observe(this, { data ->
+        viewModel.searchGifSuccess.observe(this) { data ->
             gifAdapter.dataList = data
-        })
+        }
+        viewModel.error.observe(this) { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+        binding.searchField.editText?.addTextChangedListener { text ->
+            if (!text.isNullOrEmpty()) viewModel.searchGif(text.toString())
+            else viewModel.randomGif()
+        }
     }
 
 }
